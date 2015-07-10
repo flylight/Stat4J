@@ -10,8 +10,8 @@ import org.aspectj.lang.reflect.MethodSignature;
  * Created by Andriy Rymar on 10.07.15.
  */
 @Aspect
-public class Stat4jAspect {
-    @Around("execution(* *(..)) && @annotation(Stat4JPoint)")
+public class Stat4JAsp {
+    @Around("execution(* *(..))")
     public Object around(ProceedingJoinPoint point) throws Throwable {
         Stat4J.instance().startTrack(MethodSignature.class.getName(), MethodSignature.class.cast(point.getSignature()).getMethod().getName());
         Object result = point.proceed();
