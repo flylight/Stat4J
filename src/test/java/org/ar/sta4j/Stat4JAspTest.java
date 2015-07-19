@@ -14,6 +14,9 @@ public class Stat4JAspTest {
 
         performanceTestObject.method2MS();
         performanceTestObject.method25MS();
+        performanceTestObject.method25MS();
+        performanceTestObject.method25MS();
+        performanceTestObject.method25MS();
         performanceTestObject.method155MS();
 
         Stat4J.instance().printStatIntoSystemOut();

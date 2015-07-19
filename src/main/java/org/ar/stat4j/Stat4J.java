@@ -61,9 +61,28 @@ public class Stat4J {
 
     public StringBuilder getStatSource() {
         final StringBuilder strBld = new StringBuilder();
-        records.forEach((comonentName, points) -> points.forEach((pointName, stats) -> stats.forEach((stat) -> strBld.append(
-            comonentName + "." + pointName + "() \t: \t" + stat.executionTime() + "(ns)\t|\t"
-                + stat.executionTime() / 1000000 + "(ms)\n"))));
+        records.forEach((comonentName, points) -> points.forEach((pointName, stats) -> strBld.append(generateStatLine(comonentName, pointName, stats))));
         return strBld;
     }
+
+    private String generateStatLine(String comonentName, String pointName, List<Stat> stats) {
+        StringBuilder strBld = new StringBuilder();
+
+        strBld.append(comonentName).append(pointName).append("()").append("\t\t : \t").append("times : ").append(stats.size()).append("\t Max: ").append("0").append("\t Min: ").append("0").append("\n");
+        if(stats.size()>1){
+            stats.forEach((stat) ->
+                strBld.append("\t\t" + pointName + "() :\t\t : \t" + stat.executionTime() + "(ns)\t|\t"
+                    + stat.executionTime() / 1000000 + "(ms)\n"));
+        }
+
+
+        return strBld.toString();
+    }
+
+
+
+    //
+//    stats.forEach((stat) ->
+//        strBld.append(comonentName + "." + pointName + "() \t: \t" + stat.executionTime() + "(ns)\t|\t"
+//        + stat.executionTime() / 1000000 + "(ms)\n"))
 }
