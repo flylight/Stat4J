@@ -1,12 +1,7 @@
 package org.ar.stat4j;
 
 
-import org.ar.stat4j.exception.Stat4JNoComponentException;
-import org.ar.stat4j.exception.Stat4JNoPointException;
-
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,9 +9,19 @@ import java.util.Map;
  */
 public class Stat4J {
 
+    public static final String METHOD_SIGNATURE = "()";
+    public static final String TABULATION_AFTER_METHOD = "\t\t : \t";
+    public static final String MILISECOND_SIGNATURE = "(ms)";
+    public static final String NEW_LINE = "\n";
+    public static final String NANOSECOND_SIGNATURE = "(ns)";
+    public static final String TIME_TYPE_SEPARATOR = "\t|\t";
+    public static final String CALL_TIMES = "Call times : ";
+    public static final String MAX_TIME = "\t Max: ";
+    public static final String MIN_TIME = "\t Min: ";
+    public static final String DOT_SEPARATOR = ".";
     private static Stat4J instance;
 
-    private Map<String, Map<String, List<Stat>>> records;
+    private Map<String, Map<String, Statistic>> records;
 
     private Stat4J() {
         records = new HashMap<>();
@@ -33,56 +38,52 @@ public class Stat4J {
         return instance;
     }
 
-    public Stat startTrack(String componentName, String pointName) {
-        Stat stat = new Stat(System.nanoTime());
+    public Point startTrack(String componentName, String pointName) {
+        Point point = new Point(System.nanoTime());
         if (!records.containsKey(componentName)) {
-            List<Stat> statList = new ArrayList<>();
-            statList.add(stat);
-            Map<String, List<Stat>> points = new HashMap<>();
-            points.put(pointName, statList);
-            records.put(componentName, points);
+            Statistic statistic = new Statistic();
+            statistic.getPoints().add(point);
+            Map<String, Statistic> pointToStat = new HashMap<>();
+            pointToStat.put(pointName, statistic);
+            records.put(componentName, pointToStat);
         } else if (!records.get(componentName).containsKey(pointName)) {
-            List<Stat> statList = new ArrayList<>();
-            statList.add(stat);
-            records.get(componentName).put(pointName, statList);
+            Statistic statistic = new Statistic();
+            statistic.getPoints().add(point);
+            records.get(componentName).put(pointName, statistic);
         } else {
-            records.get(componentName).get(pointName).add(stat);
+            records.get(componentName).get(pointName).getPoints().add(point);
         }
-        return stat;
+        return point;
     }
 
-    public void stopTrack(Stat stat) {
-        stat.finish(System.nanoTime());
+    public void stopTrack(Point point) {
+        point.finish(System.nanoTime());
     }
 
     public void printStatIntoSystemOut() {
-        System.out.println(getStatSource());
+        System.out.println(getStatisticAsString());
     }
 
-    public StringBuilder getStatSource() {
+    public String getStatisticAsString() {
         final StringBuilder strBld = new StringBuilder();
-        records.forEach((comonentName, points) -> points.forEach((pointName, stats) -> strBld.append(generateStatLine(comonentName, pointName, stats))));
-        return strBld;
+        records.forEach((componentName, points) -> points.forEach((pointName, stats) -> strBld.append(generateStatLine(componentName, pointName, stats))));
+        return strBld.toString();
     }
 
-    private String generateStatLine(String comonentName, String pointName, List<Stat> stats) {
+    public String getStatisticAsHTML() {
+        return "";
+    }
+
+    private String generateStatLine(String componentName, String pointName, Statistic statistic) {
         StringBuilder strBld = new StringBuilder();
 
-        strBld.append(comonentName).append(pointName).append("()").append("\t\t : \t").append("times : ").append(stats.size()).append("\t Max: ").append("0").append("\t Min: ").append("0").append("\n");
-        if(stats.size()>1){
-            stats.forEach((stat) ->
-                strBld.append("\t\t" + pointName + "() :\t\t : \t" + stat.executionTime() + "(ns)\t|\t"
-                    + stat.executionTime() / 1000000 + "(ms)\n"));
+        strBld.append(componentName).append(DOT_SEPARATOR).append(pointName).append(METHOD_SIGNATURE).append
+            (TABULATION_AFTER_METHOD).append(CALL_TIMES).append(statistic.getPointSize()).append(MAX_TIME).append(statistic.getMaxExecutionTimeInNano()).append(NANOSECOND_SIGNATURE).append(TIME_TYPE_SEPARATOR).append(statistic.getMaxExecutionTimeInMili()).append(MILISECOND_SIGNATURE).append(MIN_TIME).append(statistic.getMinExecutionTimeInNano()).append(MILISECOND_SIGNATURE).append(TIME_TYPE_SEPARATOR).append(statistic.getMinExecutionTimeInMili()).append(MILISECOND_SIGNATURE).append(NEW_LINE);
+        if (statistic.getPoints().size() > 1) {
+            statistic.getPoints().forEach((stat) -> strBld.append("\t\t").append(pointName).append(METHOD_SIGNATURE).append(TABULATION_AFTER_METHOD).append(stat.executionTimeInNanoseconds()).append(NANOSECOND_SIGNATURE).append(TIME_TYPE_SEPARATOR).append(stat.executionTimeInMiliseconds()).append(MILISECOND_SIGNATURE).append(NEW_LINE));
         }
-
 
         return strBld.toString();
     }
 
-
-
-    //
-//    stats.forEach((stat) ->
-//        strBld.append(comonentName + "." + pointName + "() \t: \t" + stat.executionTime() + "(ns)\t|\t"
-//        + stat.executionTime() / 1000000 + "(ms)\n"))
 }

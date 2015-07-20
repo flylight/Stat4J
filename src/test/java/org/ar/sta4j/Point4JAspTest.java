@@ -6,7 +6,7 @@ import org.junit.Test;
 /**
  * Created by Andriy Rymar on 10.07.15.
  */
-public class Stat4JAspTest {
+public class Point4JAspTest {
 
     @Test
     public void testPerformanceMeassuring() throws InterruptedException {
