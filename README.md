@@ -1,1 +1,1 @@
-This is Open-source project that can help people to measure application performance.
+This is open-source project for measure application performance using AOP and Annotations.
