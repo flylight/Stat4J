@@ -22,4 +22,14 @@ public class PerformanceTestObject {
         Thread.sleep(155);
         return 155;
     }
+
+    @Stat4JPoint
+    public void method1Sec() throws InterruptedException {
+        Thread.sleep(1000);
+    }
+
+    @Stat4JPoint
+    public void method1Min() throws InterruptedException {
+        Thread.sleep(60000);
+    }
 }

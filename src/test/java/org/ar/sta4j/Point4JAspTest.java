@@ -16,9 +16,11 @@ public class Point4JAspTest {
         performanceTestObject.method25MS();
         performanceTestObject.method25MS();
         performanceTestObject.method25MS();
+        //performanceTestObject.method1Min();
         performanceTestObject.method25MS();
+        performanceTestObject.method1Sec();
         performanceTestObject.method155MS();
-
-        Stat4J.instance().printStatIntoSystemOut();
+        Stat4J.instance().printStatIntoSystemOut(false);
+        Stat4J.instance().printStatIntoSystemOut(true);
     }
 }

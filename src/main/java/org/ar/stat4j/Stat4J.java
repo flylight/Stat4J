@@ -1,6 +1,7 @@
 package org.ar.stat4j;
 
 
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,6 +20,10 @@ public class Stat4J {
     public static final String MAX_TIME = "\t Max: ";
     public static final String MIN_TIME = "\t Min: ";
     public static final String DOT_SEPARATOR = ".";
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MM.dd.yy HH:mm:ss.SSS");
+    public static final String EXECUTION_DATE = "\t Execution date : ";
+    public static final String EXECUTION_TIME = "\t Execution time : ";
+    public static final String SPACE_FOR_HISTORY = "\t\t";
     private static Stat4J instance;
 
     private Map<String, Map<String, Statistic>> records;
@@ -60,30 +65,44 @@ public class Stat4J {
         point.finish(System.nanoTime());
     }
 
-    public void printStatIntoSystemOut() {
-        System.out.println(getStatisticAsString());
+    public void printStatIntoSystemOut(boolean history) {
+        System.out.println(getStatisticAsString(history));
     }
 
-    public String getStatisticAsString() {
+    public String getStatisticAsString(boolean history) {
         final StringBuilder strBld = new StringBuilder();
-        records.forEach((componentName, points) -> points.forEach((pointName, stats) -> strBld.append(generateStatLine(componentName, pointName, stats))));
+        records.forEach((componentName, points) -> points.forEach((pointName, stats) -> strBld.append(generateComponentStatistic(componentName, pointName, stats, history))));
         return strBld.toString();
     }
 
-    public String getStatisticAsHTML() {
+    public String getStatisticAsHTML(boolean history) {
         return "";
     }
 
-    private String generateStatLine(String componentName, String pointName, Statistic statistic) {
+    public String getStatisticAsJSON(boolean history){
+        return "";
+    }
+
+
+    private String generateComponentStatistic(String componentName, String pointName, Statistic
+        statistic, boolean history) {
         StringBuilder strBld = new StringBuilder();
 
         strBld.append(componentName).append(DOT_SEPARATOR).append(pointName).append(METHOD_SIGNATURE).append
             (TABULATION_AFTER_METHOD).append(CALL_TIMES).append(statistic.getPointSize()).append(MAX_TIME).append(statistic.getMaxExecutionTimeInNano()).append(NANOSECOND_SIGNATURE).append(TIME_TYPE_SEPARATOR).append(statistic.getMaxExecutionTimeInMili()).append(MILISECOND_SIGNATURE).append(MIN_TIME).append(statistic.getMinExecutionTimeInNano()).append(MILISECOND_SIGNATURE).append(TIME_TYPE_SEPARATOR).append(statistic.getMinExecutionTimeInMili()).append(MILISECOND_SIGNATURE).append(NEW_LINE);
-        if (statistic.getPoints().size() > 1) {
-            statistic.getPoints().forEach((stat) -> strBld.append("\t\t").append(pointName).append(METHOD_SIGNATURE).append(TABULATION_AFTER_METHOD).append(stat.executionTimeInNanoseconds()).append(NANOSECOND_SIGNATURE).append(TIME_TYPE_SEPARATOR).append(stat.executionTimeInMiliseconds()).append(MILISECOND_SIGNATURE).append(NEW_LINE));
+        if (history && statistic.getPoints().size() > 1) {
+            statistic.getPoints().forEach((statPoint) -> strBld.append(SPACE_FOR_HISTORY).append(pointName)
+                .append(METHOD_SIGNATURE).append(EXECUTION_DATE).append(DATE_FORMAT
+                    .format(statPoint.getExecutionDate())).append(EXECUTION_TIME).append(statPoint
+                    .executionTimeInNanoseconds()).append(NANOSECOND_SIGNATURE).append(TIME_TYPE_SEPARATOR).append(statPoint.executionTimeInMiliseconds()).append(MILISECOND_SIGNATURE).append(NEW_LINE));
         }
 
         return strBld.toString();
     }
 
+
+    //TODO add calculation of average value
+    //TODO add JSON printer
+    //TODO add HTML printer
+    //TODO move all pronters into separate classes
 }
