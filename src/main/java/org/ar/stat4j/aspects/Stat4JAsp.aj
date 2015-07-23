@@ -1,4 +1,4 @@
-package org.ar.stat4j.aspect;
+package org.ar.stat4j.aspects;
 
 import org.ar.stat4j.Point;
 import org.ar.stat4j.Stat4J;

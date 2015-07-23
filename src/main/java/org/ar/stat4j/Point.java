@@ -9,11 +9,9 @@ public class Point implements Comparable<Point>{
     public static final int NANO_IN_MILIS = 1000000;
     private long startTrack;
     private long finishTrack;
-    private Date executionDate;
 
     public Point(long startTrack) {
         this.startTrack = startTrack;
-        this.executionDate = new Date(System.currentTimeMillis());
     }
 
     public void finish(long finishTrack) {
@@ -35,6 +33,6 @@ public class Point implements Comparable<Point>{
     }
 
     public Date getExecutionDate() {
-        return executionDate;
+        return new Date(startTrack);
     }
 }
