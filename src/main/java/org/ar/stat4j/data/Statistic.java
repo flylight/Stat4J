@@ -1,6 +1,5 @@
-package org.ar.stat4j;
+package org.ar.stat4j.data;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,7 +9,6 @@ import java.util.List;
  */
 public class Statistic {
     private List<Point> stats = new ArrayList<>();
-    private long sum = 0;
     public int getPointSize(){
         return stats.size();
     }
@@ -40,15 +38,17 @@ public class Statistic {
     }
 
     public long getAverageExecutionTimeInNano(){
-        sum = 0;
-        stats.forEach(stat -> sum += stat.executionTimeInNanoseconds());
-        return sum / stats.size();
+        MutableLong avg = new MutableLong(0L);
+        stats.forEach(stat -> avg.add(stat.executionTimeInNanoseconds()));
+        avg.div((long)stats.size());
+        return avg.getValue();
     }
 
     public long getAverageExecutionTimeInMili(){
-        sum = 0;
-        stats.forEach(stat -> sum += stat.executionTimeInMiliseconds());
-        return sum / stats.size();
+        MutableLong avg = new MutableLong(0L);
+        stats.forEach(stat -> avg.add(stat.executionTimeInMiliseconds()));
+        avg.div((long) stats.size());
+        return avg.getValue();
     }
 
     public long getMinExecutionTimeInMili(){

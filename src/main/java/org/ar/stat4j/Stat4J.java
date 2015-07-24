@@ -1,9 +1,10 @@
 package org.ar.stat4j;
 
 
+import org.ar.stat4j.data.Point;
+import org.ar.stat4j.data.Statistic;
 import org.ar.stat4j.printers.StringPrinter;
 
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,8 +70,6 @@ public class Stat4J {
         STRING, HTML, JSON;
     }
 
-    //TODO add calculation of average value
     //TODO add JSON printer
     //TODO add HTML printer
-    //TODO move all pronters into separate classes
 }

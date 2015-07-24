@@ -1,6 +1,6 @@
 package org.ar.stat4j.aspects;
 
-import org.ar.stat4j.Point;
+import org.ar.stat4j.data.Point;
 import org.ar.stat4j.Stat4J;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

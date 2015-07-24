@@ -1,4 +1,4 @@
-package org.ar.stat4j;
+package org.ar.stat4j.data;
 
 import java.util.Date;
 

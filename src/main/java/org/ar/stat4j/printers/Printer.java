@@ -1,6 +1,6 @@
 package org.ar.stat4j.printers;
 
-import org.ar.stat4j.Statistic;
+import org.ar.stat4j.data.Statistic;
 
 import java.util.Map;
 
