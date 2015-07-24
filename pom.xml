@@ -59,7 +59,7 @@
                 <configuration>
                     <sources>
                         <source>
-                            <basedir>src/main/java/org/ar/stat4j/aspect</basedir>
+                            <basedir>src/main/java/org/ar/stat4j/aspects</basedir>
                             <includes>
                                 <include>**/*.aj</include>
                             </includes>
