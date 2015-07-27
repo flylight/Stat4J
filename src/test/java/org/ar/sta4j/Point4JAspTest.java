@@ -9,7 +9,7 @@ import org.junit.Test;
 public class Point4JAspTest {
 
     @Test
-    public void testPerformanceMeassuring() throws InterruptedException {
+    public void testPerformanceMeassuringStringOutput() throws InterruptedException {
         PerformanceTestObject performanceTestObject = new PerformanceTestObject();
 
         performanceTestObject.method2MS();
@@ -22,5 +22,21 @@ public class Point4JAspTest {
         performanceTestObject.method155MS();
 
         System.out.println(Stat4J.instance().getStatistic(Stat4J.OutputFormatType.STRING,true));
+    }
+
+    @Test
+    public void testPerformanceMeassuringJSONOutput() throws InterruptedException {
+        PerformanceTestObject performanceTestObject = new PerformanceTestObject();
+
+        performanceTestObject.method2MS();
+        performanceTestObject.method25MS();
+        performanceTestObject.method25MS();
+        performanceTestObject.method25MS();
+        //performanceTestObject.method1Min();
+        performanceTestObject.method25MS();
+        performanceTestObject.method1Sec();
+        performanceTestObject.method155MS();
+
+        System.out.println(Stat4J.instance().getStatistic(Stat4J.OutputFormatType.JSON,true));
     }
 }
