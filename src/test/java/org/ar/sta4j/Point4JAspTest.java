@@ -39,4 +39,21 @@ public class Point4JAspTest {
 
         System.out.println(Stat4J.instance().getStatistic(Stat4J.OutputFormatType.JSON,true));
     }
+
+    @Test
+    public void testPerformanceMeassuringHTMLOutput() throws InterruptedException {
+        PerformanceTestObject performanceTestObject = new PerformanceTestObject();
+
+        performanceTestObject.method2MS();
+        performanceTestObject.method25MS();
+        performanceTestObject.method25MS();
+        performanceTestObject.method25MS();
+        //performanceTestObject.method1Min();
+        performanceTestObject.method25MS();
+        performanceTestObject.method1Sec();
+        performanceTestObject.method1Sec();
+        performanceTestObject.method155MS();
+
+        System.out.println(Stat4J.instance().getStatistic(Stat4J.OutputFormatType.HTML,true));
+    }
 }

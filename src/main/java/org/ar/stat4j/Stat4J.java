@@ -3,6 +3,7 @@ package org.ar.stat4j;
 
 import org.ar.stat4j.data.Point;
 import org.ar.stat4j.data.Statistic;
+import org.ar.stat4j.printers.HTMLPrinter;
 import org.ar.stat4j.printers.JSONPrinter;
 import org.ar.stat4j.printers.StringPrinter;
 
@@ -16,6 +17,7 @@ public class Stat4J {
     private static Stat4J instance;
     private final StringPrinter stringPrinter = new StringPrinter();
     private final JSONPrinter jsonPrinter = new JSONPrinter();
+    private final HTMLPrinter htmlPrinter = new HTMLPrinter();
 
     private Map<String, Map<String, Statistic>> records;
 
@@ -61,6 +63,7 @@ public class Stat4J {
             case STRING:
                 return stringPrinter.print(records,history);
             case HTML:
+                return htmlPrinter.print(records,history);
             case JSON:
                 return jsonPrinter.print(records,history);
             default:

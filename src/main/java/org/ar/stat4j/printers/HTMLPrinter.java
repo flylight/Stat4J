@@ -27,7 +27,7 @@ public class HTMLPrinter implements Printer{
             "<body>\n" +
             "\n" +
             "<h2>Stat4J Results:</h2>\n" +
-            "<div>%s</div>\n" +
+            "<div>%date%</div>\n" +
             "<table style=\"width:100%\">\n" +
             "  <tr>\n" +
             "    <th>Class</th>\n" +
@@ -40,12 +40,12 @@ public class HTMLPrinter implements Printer{
             "    <th>Min (ms)</th>\n" +
             "    <th>Avr (ms)</th>\n" +
             "  </tr>\n" +
-            "%s"+
+            "%data%"+
             "</table>\n" +
             "\n" +
             "</body>\n" +
             "</html>";
-    public static final String COMPONENT_OUTPUT = "    <tr>\n" +
+    public static final String COMPONENT_OUTPUT = "  <tr>\n" +
             "    <th rowspan=\"2\">%s</th>\n" +
             "    <th rowspan=\"2\">%s</th>\n" +
             "    <td>%s</td>\n" +
@@ -56,17 +56,33 @@ public class HTMLPrinter implements Printer{
             "    <td>%s</td>\n" +
             "    <td>%s</td>\n" +
             "  </tr>\n"+
-            "  %s";
-    public static final String POINT_OUTPUT = "";
+            "  <tr>"+
+            "  %s"+
+            "  </tr>";
+    public static final String POINT_OUTPUT = "    <td colspan=\"7\">\n" +
+            "      <table style=\"width:100%\">\n" +
+            "        <tr>\n" +
+            "          <th>Date</th>\n" +
+            "          <th>Execution time (ns)</th>\n" +
+            "          <th>Execution time (ms)</th>\n" +
+            "        </tr>\n" +
+            "        %1s" +
+            "      </table>\n" +
+            "    </td>";
+    public static final String POINT_INFO = "        <tr>\n" +
+            "          <td>%s</td>\n" +
+            "          <td>%s</td>\n" +
+            "          <td>%s</td>\n" +
+            "        </tr>";
 
     @Override
     public String print(Map<String, Map<String, Statistic>> statistic, boolean history) {
 
         final StringBuilder componentStatistic = new StringBuilder();
         statistic.forEach((componentName, points) -> points.forEach((pointName, stats) -> componentStatistic
-            .append(generateComponentStatistic(componentName, pointName, stats, history))));
+                .append(generateComponentStatistic(componentName, pointName, stats, history))));
 
-        return String.format(RESULT_OUTPUT, DATE_FORMAT.format(new Date(System.currentTimeMillis())), componentStatistic.deleteCharAt(componentStatistic.length()-1).toString());
+        return RESULT_OUTPUT.replaceAll("%date%" ,DATE_FORMAT.format(new Date(System.currentTimeMillis()))).replaceAll("%data%", componentStatistic.toString());
     }
 
     private String generateComponentStatistic(String componentName, String pointName, Statistic
@@ -75,10 +91,12 @@ public class HTMLPrinter implements Printer{
 
 
         if (history && statistic.getPoints().size() > 1) {
-            statistic.getPoints().forEach((statPoint) -> componentHistory.append(String.format
-                (POINT_OUTPUT,DATE_FORMAT.format(statPoint.getExecutionDate()),
+            StringBuilder historyBlock = new StringBuilder();
+            statistic.getPoints().forEach((statPoint) -> historyBlock.append(String.format
+                    (POINT_INFO, DATE_FORMAT.format(statPoint.getExecutionDate()),
                     statPoint.executionTimeInNanoseconds(),statPoint.executionTimeInMiliseconds()
                 )));
+            componentHistory.append(POINT_OUTPUT.replaceAll("%1s", historyBlock.toString()));
         }
 
         return String.format(COMPONENT_OUTPUT, componentName, pointName, statistic.getPointSize()
