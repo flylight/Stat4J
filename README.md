@@ -12,3 +12,5 @@ Using:
 NOTICE:
 
 This plugin add 3-4 millisecods to each time , so just keep in mind this information when you will analyze results.
+
+Wiki page : https://github.com/flylight/Stat4J/wiki
